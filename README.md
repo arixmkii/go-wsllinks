@@ -57,7 +57,7 @@ move go-wsllinks.exe uname.exe
 Prepare config:
 ```bat
 echo mode = direct > uname.ini
-echo binary = C:\\msys64\\usr\\bin\\uname.exe >> uname.ini
+echo binary = C:\msys64\usr\bin\uname.exe >> uname.ini
 ```
 Call the command:
 ```bat
