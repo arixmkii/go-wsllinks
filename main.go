@@ -1,12 +1,13 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 
+	"github.com/arixmkii/go-wsllinks/pkg/wsl"
 	"github.com/gookit/ini/v2"
 )
 
@@ -28,19 +29,19 @@ func main() {
 	if err != nil {
 		os.Exit(-1)
 	}
-	distro := cfg.String("distro", "")
-	user := cfg.String("user", "")
-	resolvedBinary := cfg.String("binary", targetBinary)
-	if len(strings.TrimSpace(distro)) == 0 || len(strings.TrimSpace(user)) == 0 {
+
+	var app string
+	var args []string
+	switch strings.TrimSpace(cfg.String("mode", "")) {
+	case "wsl", "":
+		app, args, err = wsl.ResovleCommand(targetBinary, cfg, os.Args[1:])
+	default:
+		err = errors.New("Unsupported mode")
+	}
+	if err != nil {
 		os.Exit(-1)
 	}
-	if resolvedBinary != targetBinary {
-		if !path.IsAbs(resolvedBinary) || path.Base(resolvedBinary) != targetBinary {
-			os.Exit(-1)
-		}
-	}
-	args := append([]string{"-d", distro, "-u", user, resolvedBinary}, os.Args[1:]...)
-	cmd := exec.Command("wsl", args...)
+	cmd := exec.Command(app, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

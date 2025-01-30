@@ -14,8 +14,9 @@ Application loads 2 ini files relative to itself:
 
 Supported properties:
 
-* `distro` - mandatory, name of the WSL distro, can't be empty
-* `user` - mandatory, user name to use, can't be empty
+* `mode` - optional, operation mode, currently supported "wsl" (default).
+* `distro` - mandatory, wsl mode only, name of the WSL distro, can't be empty
+* `user` - optinonal, wsl mode only, user name to use, if skipped then will use default user configured by wsl
 * `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>`
 
 ## Example
