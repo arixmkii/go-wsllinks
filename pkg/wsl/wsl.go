@@ -12,7 +12,7 @@ import (
 func ResovleCommand(binary string, cfg *ini.Ini, originalArgs []string) (string, []string, error) {
 	distro := strings.TrimSpace(cfg.String("distro", ""))
 	user := strings.TrimSpace(cfg.String("user", ""))
-	resolvedBinary := cfg.String("binary", binary)
+	resolvedBinary := strings.TrimSpace(cfg.String("binary", binary))
 	if len(distro) == 0 {
 		return "", nil, errors.New("Distro is not set")
 	}

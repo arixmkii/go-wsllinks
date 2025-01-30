@@ -14,12 +14,13 @@ Application loads 2 ini files relative to itself:
 
 Supported properties:
 
-* `mode` - optional, operation mode, currently supported "wsl" (default).
+* `mode` - optional, operation mode, currently supported "wsl" (default) or "direct"
 * `distro` - mandatory, wsl mode only, name of the WSL distro, can't be empty
 * `user` - optinonal, wsl mode only, user name to use, if skipped then will use default user configured by wsl
-* `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>`
+* `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>` in WSL mode
+or absolute path in Windows format or binary name found in %PATH% in direct mode.
 
-## Example
+## Example 1
 
 To output release information from distro named `Ubuntu` and user named `user`:
 
@@ -39,4 +40,26 @@ echo user = user >> cat.ini
 Call the command:
 ```bat
 cat /etc/os-release
+```
+
+## Example 2
+
+To output information from default msys2 installation:
+
+Build the app:
+```bat
+go build
+```
+Rename it to macth `uname` command:
+```bat
+move go-wsllinks.exe uname.exe
+```
+Prepare config:
+```bat
+echo mode = direct > uname.ini
+echo binary = C:\\msys64\\usr\\bin\\uname.exe >> uname.ini
+```
+Call the command:
+```bat
+uname -a
 ```

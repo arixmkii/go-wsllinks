@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/arixmkii/go-wsllinks/pkg/direct"
 	"github.com/arixmkii/go-wsllinks/pkg/wsl"
 	"github.com/gookit/ini/v2"
 )
@@ -35,6 +36,8 @@ func main() {
 	switch strings.TrimSpace(cfg.String("mode", "")) {
 	case "wsl", "":
 		app, args, err = wsl.ResovleCommand(targetBinary, cfg, os.Args[1:])
+	case "direct":
+		app, args, err = direct.ResovleCommand(binary, targetBinary, cfg, os.Args[1:])
 	default:
 		err = errors.New("Unsupported mode")
 	}
