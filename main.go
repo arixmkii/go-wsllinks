@@ -13,12 +13,12 @@ import (
 )
 
 func main() {
-	binary, err := os.Executable()
+	exe, err := os.Executable()
 	if err != nil {
 		os.Exit(-1)
 	}
-	binDir := filepath.Dir(binary)
-	targetBinary := strings.TrimSuffix(filepath.Base(binary), filepath.Ext(binary))
+	exeDir := filepath.Dir(exe)
+	targetCommand := strings.TrimSuffix(filepath.Base(exe), filepath.Ext(exe))
 
 	cfg := ini.NewWithOptions(func(opts *ini.Options) {
 		opts.Readonly = true
@@ -26,25 +26,25 @@ func main() {
 		opts.ParseVar = false
 	})
 
-	err = cfg.LoadExists(filepath.Join(binDir, "wsllinks.ini"), filepath.Join(binDir, targetBinary+".ini"))
+	err = cfg.LoadExists(filepath.Join(exeDir, "wsllinks.ini"), filepath.Join(exeDir, targetCommand+".ini"))
 	if err != nil {
 		os.Exit(-1)
 	}
 
-	var app string
-	var args []string
+	var runnerBinary string
+	var runnerArgs []string
 	switch strings.TrimSpace(cfg.String("mode", "")) {
 	case "wsl", "":
-		app, args, err = wsl.ResovleCommand(targetBinary, cfg, os.Args[1:])
+		runnerBinary, runnerArgs, err = wsl.ResovleCommand(targetCommand, cfg, os.Args[1:])
 	case "direct":
-		app, args, err = direct.ResovleCommand(binary, targetBinary, cfg, os.Args[1:])
+		runnerBinary, runnerArgs, err = direct.ResovleCommand(exe, targetCommand, cfg, os.Args[1:])
 	default:
 		err = errors.New("Unsupported mode")
 	}
 	if err != nil {
 		os.Exit(-1)
 	}
-	cmd := exec.Command(app, args...)
+	cmd := exec.Command(runnerBinary, runnerArgs...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

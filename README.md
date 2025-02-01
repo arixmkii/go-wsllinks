@@ -18,7 +18,7 @@ Supported properties:
 * `distro` - mandatory, wsl mode only, name of the WSL distro, can't be empty
 * `user` - optinonal, wsl mode only, user name to use, if skipped then will use default user configured by wsl
 * `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>` in WSL mode
-or absolute path in Windows format or binary name found in %PATH% in direct mode.
+or absolute or relative path in Windows format in direct mode.
 
 ## Example 1
 

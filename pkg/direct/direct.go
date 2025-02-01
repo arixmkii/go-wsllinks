@@ -9,8 +9,12 @@ import (
 	"github.com/gookit/ini/v2"
 )
 
-func ResovleCommand(originalExe string, binary string, cfg *ini.Ini, originalArgs []string) (string, []string, error) {
-	targetBinary := strings.TrimSpace(cfg.String("binary", binary))
+func ResovleCommand(originalExe string, targetCommand string, cfg *ini.Ini, originalArgs []string) (string, []string, error) {
+	originalExeDir := filepath.Dir(originalExe)
+	targetBinary := strings.TrimSpace(cfg.String("binary", targetCommand))
+	if !filepath.IsAbs(targetBinary) {
+		targetBinary = filepath.Join(originalExeDir, targetBinary)
+	}
 	resolvedBinary, err := exec.LookPath(targetBinary)
 	if err != nil {
 		return "", nil, err
@@ -18,7 +22,7 @@ func ResovleCommand(originalExe string, binary string, cfg *ini.Ini, originalArg
 	if resolvedBinary == originalExe {
 		return "", nil, fmt.Errorf("Possible recursion detected calling: %s", resolvedBinary)
 	}
-	if strings.TrimSuffix(filepath.Base(resolvedBinary), filepath.Ext(resolvedBinary)) != binary {
+	if strings.TrimSuffix(filepath.Base(resolvedBinary), filepath.Ext(resolvedBinary)) != targetCommand {
 		return "", nil, fmt.Errorf("Invalid binary: %s", resolvedBinary)
 	}
 	return resolvedBinary, originalArgs, nil
