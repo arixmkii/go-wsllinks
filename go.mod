@@ -1,6 +1,6 @@
 module github.com/arixmkii/go-wsllinks
 
-go 1.23.4
+go 1.24.0
 
 require github.com/gookit/ini/v2 v2.2.3
 
