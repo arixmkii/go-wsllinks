@@ -1,9 +1,9 @@
 # go-wsllinks
-Like a symlink for a binary inside WSL
+Like a symlink for a binary inside WSL 2
 
 ## How it works
 
-Proxy application calls selected binary inside specified WSL distro.
+Proxy application calls selected binary inside specified WSL 2 distro.
 
 ## Configuration
 
@@ -14,10 +14,12 @@ Application loads 2 ini files relative to itself:
 
 Supported properties:
 
-* `mode` - optional, operation mode, currently supported "wsl" (default) or "direct"
-* `distro` - mandatory, wsl mode only, name of the WSL distro, can't be empty
-* `user` - optinonal, wsl mode only, user name to use, if skipped then will use default user configured by wsl
-* `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>` in WSL mode
+* `mode` - optional, operation mode, currently supported "wsl" (default) or "direct";
+* `distro` - mandatory, "wsl" mode only, name of the WSL distro, can't be empty;
+* `user` - optinonal, "wsl" mode only, user name to use, if skipped then will use default user configured by WSL 2;
+* `shellType` - optional, "wsl" mode only, supported types are "standard", "login", "none", if missing then command will be executed with --exec
+argument;
+* `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>` in "wsl" mode
 or absolute or relative path in Windows format in direct mode.
 
 ## Example 1
