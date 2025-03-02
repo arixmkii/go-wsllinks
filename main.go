@@ -39,7 +39,7 @@ func main() {
 	case "direct":
 		runnerBinary, runnerArgs, err = direct.ResovleCommand(exe, targetCommand, cfg, os.Args[1:])
 	default:
-		err = errors.New("Unsupported mode")
+		err = errors.New("unsupported mode")
 	}
 	if err != nil {
 		os.Exit(-1)
