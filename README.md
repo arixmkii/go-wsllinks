@@ -22,7 +22,8 @@ argument;
 * `binary` - optional, should be equal to `<binary-name-no-ext>` or absolute path of the form `/some/path/<binary-name-no-ext>` in "wsl" mode
 or absolute or relative path in Windows format in direct mode;
 * `baseDir` - optional, "direct" mode only, should be absolute path, sets base dir for `binary` lookup, if missing then current executable dir
-is used as a base.
+is used as a base;
+* `extraPath` - optional, "direct" mode only, should be in format of PATH environment variable.
 
 ## Example 1
 

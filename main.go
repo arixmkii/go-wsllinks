@@ -33,11 +33,12 @@ func main() {
 
 	var runnerBinary string
 	var runnerArgs []string
+	var runnerEnv []string
 	switch strings.TrimSpace(cfg.String("mode", "")) {
 	case "wsl", "":
-		runnerBinary, runnerArgs, err = wsl.ResovleCommand(targetCommand, cfg, os.Args[1:])
+		runnerBinary, runnerArgs, runnerEnv, err = wsl.ResovleCommand(targetCommand, cfg, os.Args[1:])
 	case "direct":
-		runnerBinary, runnerArgs, err = direct.ResovleCommand(exe, targetCommand, cfg, os.Args[1:])
+		runnerBinary, runnerArgs, runnerEnv, err = direct.ResovleCommand(exe, targetCommand, cfg, os.Args[1:])
 	default:
 		err = errors.New("unsupported mode")
 	}
@@ -48,6 +49,7 @@ func main() {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd.Env = runnerEnv
 	e := cmd.Run()
 	if e != nil {
 		os.Exit(-1)

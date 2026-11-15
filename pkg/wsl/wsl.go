@@ -3,13 +3,14 @@ package wsl
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path"
 	"strings"
 
 	"github.com/gookit/ini/v2"
 )
 
-func ResovleCommand(targetCommand string, cfg *ini.Ini, originalArgs []string) (string, []string, error) {
+func ResovleCommand(targetCommand string, cfg *ini.Ini, originalArgs []string) (string, []string, []string, error) {
 	distro := strings.TrimSpace(cfg.String("distro", ""))
 	user := strings.TrimSpace(cfg.String("user", ""))
 	targetBinary := strings.TrimSpace(cfg.String("binary", targetCommand))
@@ -20,14 +21,14 @@ func ResovleCommand(targetCommand string, cfg *ini.Ini, originalArgs []string) (
 	case "none":
 	case "":
 	default:
-		return "", nil, errors.New("unsupported shell type")
+		return "", nil, nil, errors.New("unsupported shell type")
 	}
 	if len(distro) == 0 {
-		return "", nil, errors.New("distro is not set")
+		return "", nil, nil, errors.New("distro is not set")
 	}
 	if targetBinary != targetCommand {
 		if !path.IsAbs(targetBinary) || path.Base(targetBinary) != targetCommand {
-			return "", nil, fmt.Errorf("invalid binary: %s", targetBinary)
+			return "", nil, nil, fmt.Errorf("invalid binary: %s", targetBinary)
 		}
 	}
 	wslArgs := []string{"-d", distro}
@@ -40,5 +41,5 @@ func ResovleCommand(targetCommand string, cfg *ini.Ini, originalArgs []string) (
 		wslArgs = append(wslArgs, "--shell-type", shellType)
 	}
 	wslArgs = append(wslArgs, targetBinary)
-	return "wsl", append(wslArgs, originalArgs...), nil
+	return "wsl", append(wslArgs, originalArgs...), os.Environ(), nil
 }
